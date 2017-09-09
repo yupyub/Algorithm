@@ -5,7 +5,17 @@ using namespace std;
 vector<pair<pair<int, int>, int> >vx;
 vector<pair<pair<int, int>, int> >vy;
 vector<pair<pair<int, int>, pair<int, int> > >vl;
+vector<vector<int> > g;
 int cnt[10000];
+void dfs(int s) {
+	for (int i = 0; i < g[s].size(); i++) {
+		int nn = g[s][i];
+		if (cnt[nn] == 2) {
+			cnt[nn] = 0;
+			dfs(nn);
+		}
+	}
+}
 int main() {
 	int t;
 	scanf("%d", &t);
@@ -15,6 +25,8 @@ int main() {
 		vl.clear();
 		int n, a, b, ans = 0;
 		scanf("%d", &n);
+		g.clear();
+		g.resize(n + 1);
 		for (int i = 0; i < n; i++) {
 			cnt[i] = 0;
 			scanf("%d %d", &a, &b);
@@ -31,14 +43,14 @@ int main() {
 		/*
 		printf("====================\n");
 		for (int i = 0; i < n; i++) {
-			printf("%d %d\n", vx[i].first.first, vx[i].first.second);
+		printf("%d %d\n", vx[i].first.first, vx[i].first.second);
 		}
 		printf("====================\n");
 		*/
 		for (int i = 0; i < n; i++) {
 			if (vx[i].first.first != x) {
 				if (count % 2) {
-					printf("1 NO\n");
+					printf("NO\n");
 					ans = 1;
 					break;
 				}
@@ -50,6 +62,8 @@ int main() {
 			}
 			else if (bfo == 0) {
 				vl.push_back(make_pair(make_pair(x, y), make_pair(vx[i].first.first, vx[i].first.second)));
+				g[vx[i].second].push_back(z);
+				g[z].push_back(vx[i].second);
 				cnt[vx[i].second]++;
 				cnt[z]++;
 				x = vx[i].first.first;
@@ -69,7 +83,7 @@ int main() {
 		if (ans)
 			continue;
 		if (count % 2) {
-			printf("2 NO\n");
+			printf("NO\n");
 			ans = 1;
 			break;
 		}
@@ -84,7 +98,7 @@ int main() {
 		for (int i = 0; i < n; i++) {
 			if (vy[i].first.first != y) {
 				if (count % 2) {
-					printf("3 NO\n");
+					printf("NO\n");
 					ans = 1;
 					break;
 				}
@@ -96,6 +110,8 @@ int main() {
 			}
 			else if (bfo == 0) {
 				vl.push_back(make_pair(make_pair(x, y), make_pair(vy[i].first.second, vy[i].first.first)));
+				g[vy[i].second].push_back(z);
+				g[z].push_back(vy[i].second);
 				cnt[vy[i].second]++;
 				cnt[z]++;
 				x = vy[i].first.second;
@@ -115,7 +131,7 @@ int main() {
 		if (ans)
 			continue;
 		if (count % 2) {
-			printf("4 NO\n");
+			printf("NO\n");
 			ans = 1;
 			break;
 		}
@@ -123,14 +139,13 @@ int main() {
 			continue;
 		for (int i = 0; i < n; i++) {
 			if (cnt[i] != 2) {
-				printf("5 NO\n");
+				printf("NO\n");
 				ans = 1;
 				break;
 			}
 		}
 		if (ans)
 			continue;
-		printf(">>>>>>>> 2 YES\n");
 		pair<int, int> p1, p2, p3, p4;
 		for (int i = 0; i < vl.size(); i++) {
 			p1 = vl[i].first;
@@ -142,19 +157,19 @@ int main() {
 					//printf("(%d %d) (%d %d) (%d %d) (%d %d)\n", p1.first, p1.second, p2.first, p2.second, p3.first, p3.second, p4.first, p4.second);
 					if (p1.first<p4.first && p2.first > p4.first) {
 						if (p1.second > p3.second && p1.second < p4.second) {
-							printf("(%d %d) (%d %d) (%d %d) (%d %d)\n", p1.first, p1.second, p2.first, p2.second, p3.first, p3.second, p4.first, p4.second);
-							printf("6 NO\n");
+							//printf("(%d %d) (%d %d) (%d %d) (%d %d)\n", p1.first, p1.second, p2.first, p2.second, p3.first, p3.second, p4.first, p4.second);
+							printf("NO\n");
 							ans = 1;
 							break;
 						}
 					}
 				}
-				else if(p1.first == p2.first && p3.second == p4.second){
+				else if (p1.first == p2.first && p3.second == p4.second) {
 					//printf("(%d %d) (%d %d) (%d %d) (%d %d)\n", p1.first, p1.second, p2.first, p2.second, p3.first, p3.second, p4.first, p4.second);
 					if (p1.first>p3.first && p1.first<p4.first) {
 						if (p3.second > p1.second && p3.second < p2.second) {
-							printf("(%d %d) (%d %d) (%d %d) (%d %d)\n", p1.first, p1.second, p2.first, p2.second, p3.first, p3.second, p4.first, p4.second);
-							printf("7 NO\n");
+							//printf("(%d %d) (%d %d) (%d %d) (%d %d)\n", p1.first, p1.second, p2.first, p2.second, p3.first, p3.second, p4.first, p4.second);
+							printf("NO\n");
 							ans = 1;
 							break;
 						}
@@ -164,8 +179,19 @@ int main() {
 			if (ans)
 				break;
 		}
+		if (ans)
+			continue;
+		cnt[0] = 0;
+		dfs(0);
+		for (int i = 1; i < n; i++) {
+			if (cnt[i] == 2) {
+				printf("NO\n");
+				ans = 1;
+				break;
+			}
+		}
 		if (!ans)
-			printf(">>>>>>>> 3 YES\n");
+			printf("YES\n");
 	}
 
 }
