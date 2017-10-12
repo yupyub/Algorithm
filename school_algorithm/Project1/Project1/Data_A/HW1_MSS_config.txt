@@ -1,0 +1,3 @@
+MSS_10.input MSS_10.output.txt A1
+MSS_04.input MSS_04.output.txt A2
+MSS_06.input MSS_06.output.txt A3

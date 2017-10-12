@@ -3,14 +3,85 @@
 #include <time.h>
 #include <string>
 #include <algorithm>
+#include <chrono>
+#include <iostream>
+#include <string.h>
 #define MAX 2000
 #define dataSize 4
 #define MAXSIZE 10000000
-#define INF 987654321987654321
+#define _CRT_SECURE_NO_WARNINGS
 using namespace std;
 
 typedef long long ll;
 int arr[MAXSIZE];
+
+int ReadFile(char fname[]) {
+	FILE *fp_r;
+	int data;
+	int n;
+	char filename[30];
+	sprintf(filename, "./Data_A/%s", fname);
+	fp_r = fopen(filename, "rb");
+
+	fread(&n, dataSize, 1, fp_r);
+
+	for (int i = 0; i < n; i++) {
+		fread(&data, dataSize, 1, fp_r);
+		arr[i] = data;
+	}
+	fclose(fp_r);
+	return n;
+}
+
+void MakeRandomFile(int idx) {
+	FILE *fp_w;
+	ll data,ten;
+	int idata;
+	int n;
+
+	//n = ((rand()*1024) % (1024*1024))+1;
+	n = rand() + 1;
+	char filename[30];
+	sprintf(filename, "./Data_A/MSS_%02d.input", idx);
+	//sprintf(filename, "MSS_%02d.input", idx);
+
+	fp_w = fopen(filename, "wb");
+	fwrite(&n, dataSize, 1, fp_w);
+
+	for (int i = 0; i < n; i++) {
+		data = 0;
+		ten = 1;
+		for (int j = 0; j < 10; j++) {
+			data += (ll)((rand())%10) * ten * (rand() % 2);
+			ten *= 10;
+		}
+		data %= 2147483647;
+		if (rand() % 2)
+			data *= -1;
+		idata = (int)data;
+		fwrite(&data, dataSize, 1, fp_w);
+	}
+	fclose(fp_w);
+}
+
+void LoopMakeFile(int n) {
+	int idx = 1;
+	while (n--) {
+		MakeRandomFile(idx);
+		idx++;
+	}
+}
+
+void MakeOutputFile(char fname[],int n,int t,ll sum, int s,int e, chrono::duration<double, milli> mili) {
+	FILE *fp;
+	char filename[30];
+	//sprintf(filename, "./Data_A/MSS_%02d.output.txt", idx);
+	//sprintf(filename, "MSS_%02d.input", idx);
+	sprintf(filename, "./Data_A/%s", fname);
+	fp = fopen(filename, "w");
+	fprintf(fp, "%d\n%d\n%lld\n%d %d\n%.4lf", n, t, sum, s, e, mili);
+	fclose(fp);
+}
 
 void MaxSubsequenceSum_1(int n, int* s, int* e, ll* sum) {		//O(N^2)
 	ll tmp;
@@ -45,15 +116,15 @@ ll MaxSubSum(int L, int R, int* s, int* e, ll* sum) {
 	M = (L + R) / 2;
 	MaxL = MaxSubSum(L, M, s, e, sum);
 	MaxR = MaxSubSum(M + 1, R, s, e, sum);
-	int i, j;
-	for (i = M; i >= L; i--) {
+	tmps = tmpe = M;
+	for (int i = M; i >= L; i--) {
 		LB += (ll)arr[i];
 		if (LB > MaxLB) {
 			MaxLB = LB;
 			tmps = i;
 		}
 	}
-	for (i = M + 1; i <= R; i++) {
+	for (int i = M + 1; i <= R; i++) {
 		RB += (ll)arr[i];
 		if (RB > MaxRB) {
 			MaxRB = RB;
@@ -61,56 +132,98 @@ ll MaxSubSum(int L, int R, int* s, int* e, ll* sum) {
 		}
 	}
 	Maxi = max(max(MaxL, MaxR), MaxLB + MaxRB);
-	if (Maxi == MaxL || Maxi == MaxR) 
-		return Maxi;
-	else if (Maxi == MaxLB + MaxRB) {
-		*s = tmps;
-		*e = tmpe;
-		return Maxi;
+	if (Maxi > (*sum)) {
+		if (Maxi == MaxL || Maxi == MaxR) {
+			*sum = Maxi;
+		}
+		else if (Maxi == MaxLB + MaxRB) {
+			*s = tmps;
+			*e = tmpe;
+			*sum = Maxi;
+		}
 	}
+	return Maxi;
+
 }
 void MaxSubsequenceSum_2(int n, int* s, int* e, ll* sum) {		//Divide_Conquer : O(NlogN)
 	*sum = MaxSubSum(0, n - 1, s, e, sum);
 }
-void MaxSubsequenceSum_3(int n, int* s, int* e, int* sum) {		//Dynamic Programming : O(N)
-	int tmp = 0;
-	int tmps;
-	*s = 0;
+void MaxSubsequenceSum_3(int n, int* s, int* e, ll* sum) {		//Dynamic Programming : O(N)
+	ll tmp = 0;
+	int tmps = 0;
 	for (int i = 0; i < n; i++) {
-		tmp += arr[i];
+		tmp += (ll)arr[i];
 		if (tmp > (*sum)) {
 			*sum = tmp;
+			*s = tmps;
 			*e = i;
 		}
 		else if (tmp < 0) {
 			tmp = 0;
-			*s = i + 1;
+			tmps = i + 1;
 		}
 	}
 }
-int main() {
-	FILE *fp_r;
-	int idx = 0;
-	int data;
 
-	srand(time(NULL));
-
-	//while (1) {
-	int n;
-	char *filename = "MSS_02.input";
-	//sprintf(filename, "MSS_%02d.input", idx++);
-
-	fp_r = fopen(filename, "rb");
-
-	fread(&n, dataSize, 1, fp_r);
-	printf("%d\n", n);
-
-	for (int i = 0; i < n; i++) {
-		fread(&data, dataSize, 1, fp_r);
-		printf("%d ", data);
+void Func1(int t, int n, int* s, int *e, ll* sum) {
+	*s = 0, *e = 0;
+	*sum = 0;
+	if (n <= 0) {
+		(*s) = (*e) = -1;
+		return;
 	}
-	fclose(fp_r);
-	//}
+	switch (t) {
+	case 1: MaxSubsequenceSum_1(n, s, e, sum);
+		break;
+	case 2: MaxSubsequenceSum_2(n, s, e, sum);
+		break;
+	case 3: MaxSubsequenceSum_3(n, s, e, sum);
+		break;
+	}
+	if ((*sum) == 0)
+		(*s) = (*e) = -1;
+}
 
-	return 0;
+void Func2(char filename1[], char filename2[],int t) {
+	int s, e;
+	ll sum;
+	int n = ReadFile(filename1);
+	//time start
+	chrono::system_clock::time_point st = chrono::system_clock::now();
+	Func1(t, n, &s, &e, &sum);
+	chrono::system_clock::time_point en = chrono::system_clock::now();
+	//time end
+	chrono::duration<double, milli> mili = chrono::duration_cast<chrono::duration<double, milli>>(en - st);
+
+	MakeOutputFile(filename2, n, t, sum, s, e, mili);
+}
+
+void ReadInstruction() {
+	FILE *fp;
+	int data;
+	int n;
+	char filename[30] = "./Data_A/HW1_MSS_config.txt";
+	fp = fopen(filename, "r");
+	char str[30];
+	int cnt = 0,tt;
+	char filename1[30], filename2[30];
+	while (fscanf(fp, "%s", str) != EOF) {
+		if (cnt == 0)
+			strcpy(filename1, str);
+		else if (cnt == 1)
+			strcpy(filename2, str);
+		else
+			tt = str[1]-'0';
+		if (cnt == 2)
+			Func2(filename1, filename2, tt);
+		cnt++;
+		if (cnt > 2)
+			cnt = 0;
+	}
+	fclose(fp);
+}
+int main() {
+	srand(time(NULL));
+	LoopMakeFile(10);				//Make Random Input File. 
+	ReadInstruction();
 }
