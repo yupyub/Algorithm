@@ -9,7 +9,7 @@ class SegmentTree{
         int left(int p) { return p<<1;}
         int right(int p) { return (p<<1)+1;}
         void build(int p,int L,int R){ //O(n)
-            if(L == R) st[p] = L;
+            if(L == R) st[p] = A[L];
             else{
                 build(left(p),L,(L+R)/2);
                 build(right(p),(L+R)/2+1,R);
