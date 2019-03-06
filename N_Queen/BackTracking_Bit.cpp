@@ -1,4 +1,4 @@
-#include <cstdio> //Solve the number of N-Queen
+#include <cstdio> // Print the number of N-Queen // max : 15 (1 sec)
 int ans;
 int check;
 void backtrack(int a,int b,int c){
