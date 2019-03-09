@@ -20,7 +20,7 @@ void update(int x,int y,int dir,int c){
 ll A_Star(){
     priority_queue<tuple<ll,int,int,int> >pq;
     dist[sx][sy] = 0;
-    pq.push_back(make_tuple(0,sx,sy,-1));
+    pq.push(make_tuple(0,sx,sy,-1));
     int x,y,dir,nx,ny;
     ll len;
     while(!pq.empty()){
@@ -37,14 +37,14 @@ ll A_Star(){
             len = abs(X[nx]-X[x]) + abs(Y[ny] - Y[y]);
             if(dist[nx][ny] > dist[x][y] + cost[x][y][i]){
                 dist[nx][ny] = dist[x][y] + cost[x][y][i];
-                pq.push_back(make_tuple(-(dist[nx][ny] + 10*(abs(X[ex] - X[nx]) + abs(Y[ex] - Y[ny]))),nx,ny,(dir+2)%4);
+                pq.push(make_tuple(-(dist[nx][ny] + 10*(abs(X[ex] - X[nx]) + abs(Y[ex] - Y[ny]))),nx,ny,(dir+2)%4));
             }
         }
     }
 }
 
-        
-    
+
+
 int main(){
     int rsx,rsy,rex,rey;
     scanf("%d%d%d%d",&rsx,&rsy,&rex,&rey);
@@ -83,10 +83,10 @@ int main(){
         c = get<2>(rec[i]);
         d = get<3>(rec[i]);
         e = get<4>(rec[i]);
-        a = X.lower_baound(X.begin(),X.end(),a) - X.begin();
-        b = Y.lower_baound(Y.begin(),Y.end(),b) - Y.begin();
-        c = X.lower_baound(X.begin(),X.end(),c) - X.begin();
-        d = Y.lower_baound(Y.begin(),Y.end(),d) - Y.begin();
+        a = lower_bound(X.begin(),X.end(),a) - X.begin();
+        b = lower_bound(Y.begin(),Y.end(),b) - Y.begin();
+        c = lower_bound(X.begin(),X.end(),c) - X.begin();
+        d = lower_bound(Y.begin(),Y.end(),d) - Y.begin();
         for(int y = b+1;y<d;y++)
             update(a,y,1,e);
         for(int x = a+1;x<c;x++)
