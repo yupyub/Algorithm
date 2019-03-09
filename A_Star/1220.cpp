@@ -18,7 +18,7 @@ void update(int x,int y,int dir,int c){
     cost[x+dx[dir]][y+dy[dir]][dir+2] = c;
 }
 ll A_Star(){
-    priority_queue<tuple<ll,int,int,int> >pq;
+    priority_queue<tuple<ll,int,int,char> >pq;
     dist[sx][sy] = 0;
     pq.push(make_tuple(0,sx,sy,-1));
     int x,y,dir,nx,ny;
@@ -35,15 +35,18 @@ ll A_Star(){
             ny = y+dy[i];
             if(nx<0||ny<0||nx>=X.size()||ny>=Y.size()) continue;
             len = abs(X[nx]-X[x]) + abs(Y[ny] - Y[y]);
-            if(dist[nx][ny] > dist[x][y] + cost[x][y][i]){
-                dist[nx][ny] = dist[x][y] + cost[x][y][i];
-                pq.push(make_tuple(-(dist[nx][ny] + 10*(abs(X[ex] - X[nx]) + abs(Y[ex] - Y[ny]))),nx,ny,(dir+2)%4));
+            if(dist[nx][ny] > dist[x][y] + cost[x][y][i] *len){
+                dist[nx][ny] = dist[x][y] + cost[x][y][i] * len;
+                /*
+                // h(n) >= 10
+                // Beyond this value, Consistency is lost.
+                // It means that optimal solution cannot be found.
+                */
+                pq.push(make_tuple(-(dist[nx][ny] + 10*(abs(X[ex] - X[nx]) + abs(Y[ex] - Y[ny]))),nx,ny,(i+2)%4));
             }
         }
     }
 }
-
-
 
 int main(){
     int rsx,rsy,rex,rey;
