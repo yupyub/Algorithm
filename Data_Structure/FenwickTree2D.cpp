@@ -11,7 +11,7 @@ class FenwickTree2D{
     public : FenwickTree2D(int n,int m){
                  ft.resize(n+1);
                  for(int i = 0;i<=n;i++){
-                     ft[i].assign(n+1,0);
+                     ft[i].assign(m+1,0);
                  }
                  N = n;
                  M = m;
@@ -27,7 +27,7 @@ class FenwickTree2D{
                      x+=LSOne(x);
                  }
              }
-             void adjust(int x1,int x2,int y1,int y2,int v){
+             void adjust(int x1,int y1,int x1,int x2,int v){
                  adjust(x1,y1,v);
                  adjust(x2+1,y1,-v);
                  adjust(x1,y2+1,-v);

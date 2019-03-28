@@ -4,9 +4,10 @@
 #include <tuple>
 using namespace std;
 #define LSOne(a) (a&(-a))
+typedef vector<vector<int> > vvi;
 class FenwickTree2D{
     private : 
-        vector<vector<int> > ft;
+        vvi ft;
         int N,M;
 
     public : FenwickTree2D(int n,int m){
@@ -28,7 +29,7 @@ class FenwickTree2D{
                      x+=LSOne(x);
                  }
              }
-             void adjust(int x1,int x2,int y1,int y2,int v){
+             void adjust(int x1,int y1,int x2,int y2,int v){
                  adjust(x1,y1,v);
                  adjust(x2+1,y1,-v);
                  adjust(x1,y2+1,-v);
@@ -48,7 +49,7 @@ class FenwickTree2D{
                  return rsq(x2,y2)-rsq(x2,y1-1)-rsq(x1-1,y2) + rsq(x1-1,y1-1);
              }
 };
-vector<tuple<int,int,int,int> > >rec;
+vector<tuple<int,int,int,int> >rec;
 vector<int> X,Y;
 int main(){
     int n,a,b,c,d;
@@ -61,11 +62,9 @@ int main(){
         Y.push_back(b);
         Y.push_back(d);
     }
-    //X.erase(unique(X.begin(),X.end()),X.end());
-    //Y.erase(unique(Y.begin(),Y.end()),Y.end());
     sort(X.begin(),X.end());
     sort(Y.begin(),Y.end());
-    FenwickTree2D ft(X+2,Y+2);
+    FenwickTree2D ft(X.size()+2,Y.size()+2);
     for(int i = 0;i<rec.size();i++){
         a = get<0>(rec[i]);
         b = get<1>(rec[i]);
@@ -75,16 +74,16 @@ int main(){
         b = lower_bound(Y.begin(),Y.end(),b) - Y.begin();
         c = lower_bound(X.begin(),X.end(),c) - X.begin();
         d = lower_bound(Y.begin(),Y.end(),d) - Y.begin();
-        ft.adjust(a,b,c,d,1);
+        ft.adjust(a+1,b+1,c+1,d+1,1);
     }
     int ans = -1;
     int cnt = 0;
-    for(int i = 0;i<rec.seze();i++){
+    for(int i = 0;i<rec.size();i++){
         a = get<0>(rec[i]);
         b = get<1>(rec[i]);
-        a = lower_bound(X,begin(),X.end(),a) - X.begin();
+        a = lower_bound(X.begin(),X.end(),a) - X.begin();
         b = lower_bound(Y.begin(),Y.end(),b) - Y.begin();
-        int tmp = ft.rsq(a,b,a,b);
+        int tmp = ft.rsq(a+1,b+1);
         if(ans<tmp){
             ans = tmp;
             cnt = 1;
