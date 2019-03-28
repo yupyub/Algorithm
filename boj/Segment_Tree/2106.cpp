@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <algorithm>
 #include <vector>
+#include <tuple>
 using namespace std;
 #define LSOne(a) (a&(-a))
 class FenwickTree2D{
@@ -47,3 +48,50 @@ class FenwickTree2D{
                  return rsq(x2,y2)-rsq(x2,y1-1)-rsq(x1-1,y2) + rsq(x1-1,y1-1);
              }
 };
+vector<tuple<int,int,int,int> > >rec;
+vector<int> X,Y;
+int main(){
+    int n,a,b,c,d;
+    scanf("%d",&n);
+    while(n--){
+        scanf("%d%d%d%d",&a,&b,&c,&d);
+        rec.push_back(make_tuple(a,b,c,d));
+        X.push_back(a);
+        X.push_back(c);
+        Y.push_back(b);
+        Y.push_back(d);
+    }
+    //X.erase(unique(X.begin(),X.end()),X.end());
+    //Y.erase(unique(Y.begin(),Y.end()),Y.end());
+    sort(X.begin(),X.end());
+    sort(Y.begin(),Y.end());
+    FenwickTree2D ft(X+2,Y+2);
+    for(int i = 0;i<rec.size();i++){
+        a = get<0>(rec[i]);
+        b = get<1>(rec[i]);
+        c = get<2>(rec[i]);
+        d = get<3>(rec[i]);
+        a = lower_bound(X.begin(),X.end(),a) - X.begin();
+        b = lower_bound(Y.begin(),Y.end(),b) - Y.begin();
+        c = lower_bound(X.begin(),X.end(),c) - X.begin();
+        d = lower_bound(Y.begin(),Y.end(),d) - Y.begin();
+        ft.adjust(a,b,c,d,1);
+    }
+    int ans = -1;
+    int cnt = 0;
+    for(int i = 0;i<rec.seze();i++){
+        a = get<0>(rec[i]);
+        b = get<1>(rec[i]);
+        a = lower_bound(X,begin(),X.end(),a) - X.begin();
+        b = lower_bound(Y.begin(),Y.end(),b) - Y.begin();
+        int tmp = ft.rsq(a,b,a,b);
+        if(ans<tmp){
+            ans = tmp;
+            cnt = 1;
+        }
+        else if(ans == tmp){
+            cnt++;
+        }
+    }
+    printf("%d %d\n",ans,cnt);
+}

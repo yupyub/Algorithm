@@ -1,7 +1,7 @@
 #pragma warning(disable4996)
-#include stdio.h
-#include algorithm
-#include vector
+#include <stdio.h>
+#include <algorithm>
+#include <vector>
 using namespace std;
 typedef long long ll;
 vectorll tree;
