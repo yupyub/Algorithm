@@ -67,7 +67,7 @@ class SegmentTree{
         }
 };
 vector<tuple<int,int,int,int> >line;
-vector<int> X,Y;
+vector<int> Y;
 int main(){
     int n,a,b,c,d;
     scanf("%d",&n);
@@ -75,37 +75,33 @@ int main(){
         scanf("%d%d%d%d",&a,&b,&c,&d);
         line.push_back(make_tuple(a,b,d,1));
         line.push_back(make_tuple(c,b,d,-1)); 
-        // The Sort order of -1,1 need not be considered. 
+        // The alignment order of -1,1 need not be considered. 
         // Because, lines are not overlapping
-        X.push_back(a);
-        X.push_back(c);
         Y.push_back(b);
         Y.push_back(d);
     }
-    X.erase(unique(X.begin(),X.end()),X.end());
     Y.erase(unique(Y.begin(),Y.end()),Y.end());
-    sort(X.begin(),X.end());
     sort(Y.begin(),Y.end());
     sort(line.begin(),line.end());
     SegmentTree st(Y);
     int ans = -1,cnt = 0;
-    int x,y1,y2,diff;
+    int y1,y2,diff,tmp;
     for(int i = 0;i<line.size();i++){
-        x = get<0>(line[i]);
         y1 = get<1>(line[i]);
         y2 = get<2>(line[i]);
         diff = get<3>(line[i]);
-        x = lower_bound(X.begin(),X.end(),x) - X.begin();
         y1 = lower_bound(Y.begin(),Y.end(),y1) - Y.begin();
         y2 = lower_bound(Y.begin(),Y.end(),y2) - Y.begin();
         st.update_range(y1,y2,diff);
-        int tmp = st.sum(y1,y1);
-        if(ans<tmp){
-            ans = tmp;
-            cnt = 1;
-        }
-        else if(ans == tmp){
-            cnt++;
+        if(diff == 1){
+            tmp = st.sum(y1,y1);
+            if(ans<tmp){
+                ans = tmp;
+                cnt = 1;
+            }
+            else if(ans == tmp){
+                cnt++;
+            }
         }
     }
     printf("%d %d\n",ans,cnt);
