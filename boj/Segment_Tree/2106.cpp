@@ -3,87 +3,103 @@
 #include <vector>
 #include <tuple>
 using namespace std;
-#define LSOne(a) (a&(-a))
-typedef vector<vector<int> > vvi;
-class FenwickTree2D{
+class SegmentTree{
     private : 
-        vvi ft;
-        int N,M;
-
-    public : FenwickTree2D(int n,int m){
-                 ft.resize(n+1);
-                 for(int i = 0;i<=n;i++){
-                     ft[i].assign(n+1,0);
-                 }
-                 N = n;
-                 M = m;
-             }
-             void adjust(int x,int y,int v){
-                 int y1;
-                 while(x<=N){
-                     y1 = y;
-                     while(y1<=M){
-                         ft[x][y1] += v;
-                         y1 += LSOne(y1);
-                     }
-                     x+=LSOne(x);
-                 }
-             }
-             void adjust(int x1,int y1,int x2,int y2,int v){
-                 adjust(x1,y1,v);
-                 adjust(x2+1,y1,-v);
-                 adjust(x1,y2+1,-v);
-                 adjust(x2+1,y2+1,v);
-             }
-             int rsq(int x,int y){
-                 int sum = 0;
-                 for(;x;x-=LSOne(x)){
-                     int y1 = y;
-                     for(;y1;y1-=LSOne(y1)){
-                         sum += ft[x][y1];
-                     }
-                 }
-                 return sum;
-             }
-             int rsq(int x1,int y1,int x2,int y2){
-                 return rsq(x2,y2)-rsq(x2,y1-1)-rsq(x1-1,y2) + rsq(x1-1,y1-1);
-             }
+        vector<int> st,A,lazy;
+        int n;
+        int left(int p) { return p<<1;}
+        int right(int p) { return (p<<1)+1;}
+        void build(int p,int L,int R){ //O(n)
+            if(L == R) st[p] = A[L];
+            else{
+                build(left(p),L,(L+R)/2);
+                build(right(p),(L+R)/2+1,R);
+                st[p] = st[left(p)] + st[right(p)];
+            }
+        }
+        void update_lazy(int p,int L,int R){
+            if(lazy[p] != 0){
+                st[p] += (R-L+1)*lazy[p];
+                if(L!=R){
+                    lazy[left(p)] += lazy[p];
+                    lazy[right(p)] += lazy[p];
+                }
+                lazy[p] = 0;
+            }
+        }
+        void update_range(int p,int L,int R,int i,int j,int diff){
+            update_lazy(p,L,R);
+            if(i>R||j<L) return;
+            if(i<=L && R<=j){
+                st[p] += (R-L+1)*diff;
+                if(L!=R){
+                    lazy[left(p)] += diff;
+                    lazy[right(p)] += diff;
+                }
+                return;
+            }
+            update_range(left(p),L,(L+R)/2,i,j,diff);
+            update_range(right(p),(L+R)/2+1,R,i,j,diff);
+            st[p] = st[left(p)] + st[right(p)];
+        }
+        long long sum(int p,int L,int R,int i,int j){
+            update_lazy(p,L,R);
+            if(i>R||j<L) return 0;
+            if(i<=L&&R<=j) return st[p];
+            return sum(left(p),L,(L+R)/2,i,j) + sum(right(p),(L+R)/2+1,R,i,j);
+        }
+    public :
+        SegmentTree(const vector<int> &_A){
+            A = _A;
+            n = (int)A.size();
+            st.assign(4*n,0);
+            lazy.assign(4*n,0);
+            //build(1,0,n-1);
+        }
+        long long sum(int i,int j) { 
+            return sum(1,0,n-1,i,j);
+        }
+        void update_range(int i,int j,int diff){
+            update_range(1,0,n-1,i,j,diff);
+        }
+        void update(int i, int diff){
+            update_range(1,0,n-1,i,i,diff);
+        }
 };
-vector<tuple<int,int,int,int> >rec;
+vector<tuple<int,int,int,int> >line;
 vector<int> X,Y;
 int main(){
     int n,a,b,c,d;
     scanf("%d",&n);
     while(n--){
         scanf("%d%d%d%d",&a,&b,&c,&d);
-        rec.push_back(make_tuple(a,b,c,d));
+        line.push_back(make_tuple(a,b,d,1));
+        line.push_back(make_tuple(c,b,d,-1)); 
+        // The Sort order of -1,1 need not be considered. 
+        // Because, lines are not overlapping
         X.push_back(a);
         X.push_back(c);
         Y.push_back(b);
         Y.push_back(d);
     }
+    X.erase(unique(X.begin(),X.end()),X.end());
+    Y.erase(unique(Y.begin(),Y.end()),Y.end());
     sort(X.begin(),X.end());
     sort(Y.begin(),Y.end());
-    FenwickTree2D ft(X.size()+2,Y.size()+2);
-    for(int i = 0;i<rec.size();i++){
-        a = get<0>(rec[i]);
-        b = get<1>(rec[i]);
-        c = get<2>(rec[i]);
-        d = get<3>(rec[i]);
-        a = lower_bound(X.begin(),X.end(),a) - X.begin();
-        b = lower_bound(Y.begin(),Y.end(),b) - Y.begin();
-        c = lower_bound(X.begin(),X.end(),c) - X.begin();
-        d = lower_bound(Y.begin(),Y.end(),d) - Y.begin();
-        ft.adjust(a+1,b+1,c+1,d+1,1);
-    }
-    int ans = -1;
-    int cnt = 0;
-    for(int i = 0;i<rec.size();i++){
-        a = get<0>(rec[i]);
-        b = get<1>(rec[i]);
-        a = lower_bound(X.begin(),X.end(),a) - X.begin();
-        b = lower_bound(Y.begin(),Y.end(),b) - Y.begin();
-        int tmp = ft.rsq(a+1,b+1);
+    sort(line.begin(),line.end());
+    SegmentTree st(Y);
+    int ans = -1,cnt = 0;
+    int x,y1,y2,diff;
+    for(int i = 0;i<line.size();i++){
+        x = get<0>(line[i]);
+        y1 = get<1>(line[i]);
+        y2 = get<2>(line[i]);
+        diff = get<3>(line[i]);
+        x = lower_bound(X.begin(),X.end(),x) - X.begin();
+        y1 = lower_bound(Y.begin(),Y.end(),y1) - Y.begin();
+        y2 = lower_bound(Y.begin(),Y.end(),y2) - Y.begin();
+        st.update_range(y1,y2,diff);
+        int tmp = st.sum(y1,y1);
         if(ans<tmp){
             ans = tmp;
             cnt = 1;
