@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <algorithm>
 using namespace std;
-
+// dp[x] = x 번째 수를 마지막 원소로 갖는 LIS의 길이
 int main() {
 	int n;
 	scanf("%d", &n);
