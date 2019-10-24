@@ -1,4 +1,4 @@
-#include <cstdio>
+#include <cstdio> // knapsack 문제
 #include <vector>
 using namespace std;
 vector<pair<int,int> > item;
