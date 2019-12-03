@@ -1,0 +1,62 @@
+1. 분할상환분석
+
+2. Tree
+	2-1. AVL-Tree
+	2-2. Splay Tree
+	2-3. Interval Tree
+	2-4. Quard Tree (Graphic ?)
+
+3.NP-Hard
+	3-1. Tabu Search
+	3-2. Genetic Algorithm
+	3-3. Ant-Colony Optimization
+	3-4. Simulated annealing
+	3-5. Beam Search
+	
+4. MST
+	4-1. Arborescence Problem
+	4-2. Striner Tree
+	4-3. 차수 제한이 있는 MST
+	4-4. K-MST
+
+5. Graph 
+	5-1. Chu–Liu/Edmonds' algorithm
+	5-2. Hungarian Algorithm
+	5-3. Edmond matching
+
+6. Math
+	6-1. Buruside's Lemma
+	6-2. Stirling Number
+	6-3. Zeckendorf's Theorem
+	6-4. Pollard's rho Algorithm (+ Richard P.Brent 가 개선함)
+	6-5. Multiplicative Functions
+	6-6. Richard Peirse Brent. An improved Monte Carlo factorization algorithm
+	6-7. Burnside lemma
+	6-8. Carmichael's Function 
+	6-9. Riemann hypothesis
+	6-10. Fermat's little theorem
+	6-11. Chinese remainder theorem (-> 이항계수 O(P+logN))
+	6-12. Sprague-Grundy Theorem
+	6-13. Miller-Rabin primality test
+
+7. String handling
+	7-1. Linear Time Suffix Tree Construction (Esko Ukkonen, one-line constructions of suffix tree)
+	7-2. Generalized Suffix Tree (Tree1 + Tree2)
+	7-3. Boyer-Moore's Algorithm
+	7-4. Rabin-Karp algorithm
+	7-5. Aho-Corasick 
+	7-6. Hashing
+	7-7. Shortest Common superstring
+	7-8. Burrows-Wheeler transformation Algorithm
+	7-9. Suffix Automation
+	7-10. Radix Tree
+	7-11. 단조사슬 알고리즘 (A.M. 앤드루)
+
+8. etc
+	8-1. Inner ConvexHull
+	8-2. N-Dimension ConvexHull
+	8-3. PCA + ConvexHull
+	
+9. IDEA
+	9-1. N-dim dfs/bfs
+	9-2. 그래프의 가중치 = (시작S 에서 거쳐온 간선의 수) * (간선 가중치(0도 있음))
