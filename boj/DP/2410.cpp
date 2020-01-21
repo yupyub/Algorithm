@@ -11,8 +11,7 @@ int main(){
 		a++;
 		b*=2;
 	}
-	dp[0][0] = 1;
-	for(int i = 1;i<=n;i++){
+	for(int i = 0;i<=n;i++){
 		dp[i][0] = 1;
 		for(int j = 1;j<20;j++){
 			if(i>=tw[j]) dp[i][j] = (dp[i][j-1] + dp[i-tw[j]][j])%1000000000;
