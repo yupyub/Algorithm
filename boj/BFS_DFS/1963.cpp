@@ -7,6 +7,7 @@ int notPrime[100000];
 vector<int> prime;
 vector<vector<int> >g;
 vector<int>chk;
+int back[100000];
 void checkPrime(){
 	notPrime[1] = 1;
 	for(int i = 2;i*i<10000;i++){ // 9999까지 소수를 찾는다
@@ -18,12 +19,14 @@ void checkPrime(){
 	}
 }
 int similar(int a,int b){
-	int tmp = b-a;
-	if(tmp<10) return 1;
-	else if(tmp<100 && tmp%10 == 0) return 1;
-	else if(tmp<1000 && tmp%100 == 0) return 1;
-	else if(tmp<10000 && tmp%1000 == 0) return 1;
-	return 0;
+	int cnt = 0;
+	for(int i = 0;i<4;i++){
+		if(a%10 != b%10) cnt++;
+		a/=10;
+		b/=10;
+	}
+	if(cnt == 1) return 1;
+	else return 0;
 }
 int bfs(int s,int e){
 	if(s == e)
@@ -51,7 +54,7 @@ int main(){
 	int siz = prime.size();
 	g.clear();
 	g.resize(siz);
-	for(int i = 0;i<siz;i++){
+	for(int i = 0;i<siz-1;i++){
 		for(int j = i+1;j<siz;j++){
 			if(similar(prime[i],prime[j])){
 				g[i].push_back(j);
@@ -67,9 +70,10 @@ int main(){
 		chk.resize(siz);
 		for(int i = 0;i<siz;i++){
 			if(prime[i] == sP) s = i;
-			else if(prime[i] == eP) e = i;
+			if(prime[i] == eP) e = i;
 		}
-		printf("%d\n",bfs(s,e));                   
+		int ans = bfs(s,e);
+		if(ans == -1) printf("Impossible\n");
+		else printf("%d\n",ans);
 	}
 }
-	
