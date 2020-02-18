@@ -51,7 +51,7 @@ class SegmentTree{
         SegmentTree(const vector<long long> &_A){
             A = _A;
             n = (int)A.size();
-            st.assign(4*n,0);
+            st.assign(4*n,0); // compact : 1<<(k+1) (n<=2^k)
             lazy.assign(4*n,0);
             build(1,0,n-1);
         }
