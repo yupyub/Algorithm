@@ -1,11 +1,13 @@
 // MO's Algorithm
 // 그냥 시간복잡도는 O(N^2) 이지만 
 // Sqrt decomposition 기법을 이용해 O(Q(N+Q)sqrt(N))으로 최적화 (Q:query수)
+#pragma GCC optimize("O3") //최적화 LV3
 #include <cstdio>
 #include <algorithm>
 #include <vector>
 #include <tuple>
 #include <cmath>
+#include <map>
 using namespace std;
 int add_range(int arr[],int count[],int ret,int i){
 	if(count[arr[i]] == 0) ret++;
@@ -34,12 +36,17 @@ int update(int arr[],int count[], int ret,pair<int,int> qu1,pair<int,int>qu2){
 	return ret;
 }
 int main(){
-	int arr_size,query_size,qu1,qu2,ret = 0;
-	int arr[100001] = {0,};
-	int count[100001] = {0,};
+	int arr_size,query_size,qu1,qu2,ret = 0,num;
+	int arr[1000001] = {0,};
+	int count[1000001] = {0,};
+	map<int,int> number;
 	scanf("%d",&arr_size);
-	for(int i = 0;i<arr_size;i++)
-		scanf("%d",&arr[i]);
+	for(int i = 0;i<arr_size;i++){
+		scanf("%d",&num);
+		if(number[num] == 0)
+			number[num] = i+1;
+		arr[i] = number[num];
+	}
 	scanf("%d",&query_size);
 	vector<pair<int,int> > query;
 	vector<tuple<int,int,int> >query_sort;

@@ -7,22 +7,25 @@
 #include <tuple>
 #include <cmath>
 using namespace std;
-int add_range(int arr[],int count[],int ret,int i){
-	if(count[arr[i]] == 0) ret++;
+typedef long long ll;
+ll add_range(ll arr[],int count[],ll ret,int i){
+	ret -= (ll)count[arr[i]]*(ll)count[arr[i]]*arr[i];
 	count[arr[i]]++;
+	ret += (ll)count[arr[i]]*(ll)count[arr[i]]*arr[i];
 	return ret;
 }
-int del_range(int arr[],int count[],int ret,int i){
-	if(count[arr[i]] == 1) ret--;
+ll del_range(ll arr[],int count[],ll ret,int i){
+	ret -= (ll)count[arr[i]]*(ll)count[arr[i]]*arr[i];
 	count[arr[i]]--;
+	ret += (ll)count[arr[i]]*(ll)count[arr[i]]*arr[i];
 	return ret;	
 }
-int init(int arr[],int count[], int ret,pair<int,int> qu){
+ll init(ll arr[],int count[], ll ret,pair<int,int> qu){
 	for(int i = qu.first;i<=qu.second;i++)
 		ret = add_range(arr,count,ret,i);
 	return ret;
 }
-int update(int arr[],int count[], int ret,pair<int,int> qu1,pair<int,int>qu2){
+ll update(ll arr[],int count[], ll ret,pair<int,int> qu1,pair<int,int>qu2){
 	for(int i = qu1.first-1;i>=qu2.first;i--)
 		ret = add_range(arr,count,ret,i);
 	for(int i = qu1.first;i<qu2.first;i++)
@@ -34,16 +37,16 @@ int update(int arr[],int count[], int ret,pair<int,int> qu1,pair<int,int>qu2){
 	return ret;
 }
 int main(){
-	int arr_size,query_size,qu1,qu2,ret = 0;
-	int arr[100001] = {0,};
-	int count[100001] = {0,};
-	scanf("%d",&arr_size);
+	int arr_size,query_size,qu1,qu2;
+	ll ret = 0;
+	ll arr[100000] = {0,};
+	int count[1000001] = {0,};
+	scanf("%d %d",&arr_size,&query_size);
 	for(int i = 0;i<arr_size;i++)
-		scanf("%d",&arr[i]);
-	scanf("%d",&query_size);
+		scanf("%lld",&arr[i]);
 	vector<pair<int,int> > query;
 	vector<tuple<int,int,int> >query_sort;
-	vector<int>ans;
+	vector<ll>ans;
 	ans.resize(query_size);
 	int sqrt_n = sqrt(arr_size);
 	for(int i = 0;i<query_size;i++){
@@ -60,6 +63,6 @@ int main(){
 		ans[get<2>(query_sort[i])] = ret;
 	}
 	for(int i = 0;i<query_size;i++)
-		printf("%d\n",ans[i]);
+		printf("%lld\n",ans[i]);
 	return 0;
 }
