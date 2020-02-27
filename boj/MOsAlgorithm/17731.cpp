@@ -78,8 +78,8 @@ int main(){
 	vector<tuple<int,int,int> >query_sort;
 	vector<ll>ans;
 	ans.resize(query_size);
-	//int sqrt_n = sqrt(arr_size);
-	int sqrt_n = 200;
+	int sqrt_n = sqrt(arr_size);
+	//int sqrt_n = 200;
 	for(int i = 0;i<query_size;i++){
 		scanf("%d %d",&qu1,&qu2);
 		qu1--,qu2--;
