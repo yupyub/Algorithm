@@ -75,6 +75,7 @@ int main(){
 				}
 			}
 		}
+		// 사이클이 구성되려면 모든 노드에서 indegree와 outdegree가 0이 아니어야 한다.
 		int in_zero = 0,out_zero = 0;
 		for(int i = 0;i<SCC.size();i++){
 			if(!SCC_indegree[i])
