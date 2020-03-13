@@ -5,8 +5,8 @@
 #include <vector>
 #include <stack>
 #define V_MAX 4002 // True False 2경우의 Vertex 필요 (2~V*2+1 index 사용)
-#define NUMBERING(x) (x<0?-x*2:x*2+1) // 1->3, -1->2 // 2->5, -2->4
-#define OPPOSITE(x) (x%2?x-1:x+1)     // 3->2, 2->3  // 5->4, 4->5
+#define NUMBERING(x) ((x)<0?-(x)*2:(x)*2+1) // 1->3, -1->2 // 2->5, -2->4
+#define OPPOSITE(x) ((x)%2?(x)-1:(x)+1)     // 3->2, 2->3  // 5->4, 4->5
 using namespace std;
 vector<int>graph[V_MAX];
 vector<vector<int> > SCC;
