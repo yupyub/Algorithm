@@ -1,25 +1,20 @@
 #include <cstdio>
-#include <algorithm>
-#include <cstring>
 #include <string>
 #include <iostream>
 #include <vector>
 using namespace std;
 vector<pair<int,string> >state;
 int main(){
-	int n,time,idx;
-	string operation,str;
+	int n,time,idx,t;
+	string operation,str,tmp;
 	cin >> n;
 	while(n--){
 		cin >> operation >> str >> time;
-		if(operation.compare("type") == 0){
-			if(state.empty())
-				state.push_back(make_pair(time,str));
-			else
-				state.push_back(make_pair(time,state.back().second+str));
-		}
+		tmp = (state.empty() ? "" : state.back().second);
+		if(operation.compare("type") == 0)
+			state.push_back(make_pair(time,tmp+str));
 		else{
-			int t = time-stoi(str);
+			t = time-stoi(str);
 			idx = state.size()-1;
 			for(int i = 0;i<=idx;i++)
 				if(state[i].first>=t){
@@ -31,12 +26,9 @@ int main(){
 				state.push_back(make_pair(time,""));
 			else if(t == -1)
 				state.push_back(make_pair(time,state[idx-1].second));
-			else if(!state.empty())
-				state.push_back(make_pair(time,state.back().second));
-			else
-				state.push_back(make_pair(time,""));
+			else 
+				state.push_back(make_pair(time,tmp));
 		}
-		
 	}
 	if(!state.empty())
 		cout << state.back().second << endl;
