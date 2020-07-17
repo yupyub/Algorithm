@@ -1,4 +1,3 @@
-// 유령 중복을 허용하는 경우
 #include <cstdio>
 #include <algorithm>
 #include <iostream>
@@ -13,6 +12,7 @@
 #include <map>
 #include <functional>
 using namespace std;
+typedef long long ll;
 const int INF = 3'000'000;
 int dx[] = {-1,0,1,0};
 int dy[] = {0,1,0,-1};
@@ -22,7 +22,9 @@ vector<tuple<int,int,int> >g[4];
 // x,t,1 : / 방향 거울
 // x,t,2 : \ 방향 거울
 // x,t,3 : 유령
-map<tuple<int,int,int>, pair<int,int> >sol;
+int visitCounter = 0;
+map<tuple<int,int,int>, pair<int,ll> >sol;
+map<pair<int,int>, int> visit;
 int detect(int x1,int x2,int y1,int y2,int dir,int idx){
 	int x = get<0> (g[dir][idx]);
 	int y = get<1> (g[dir][idx]);
@@ -58,7 +60,7 @@ int findNext(int x1,int x2,int y1,int y2,int dir){
 void simul(int sx,int sy,int sdir){
 	auto it = sol.find(make_tuple(sx,sy,sdir));
 	if(it != sol.end()){
-		printf("%d %d\n",(it->second).first,(it->second).second);
+		printf("%d %lld\n",(it->second).first,(it->second).second);
 		return;
 	}
 	int dir = sdir;
@@ -67,7 +69,7 @@ void simul(int sx,int sy,int sdir){
 	int idx,nx,ny,nc;
 	int ghost = 0;
 	int dist = 0;
-	int tot = 0;
+	ll tot = 0;
 	while(1){
 		nx = x + dx[dir];
 		ny = y + dy[dir];
@@ -93,8 +95,11 @@ void simul(int sx,int sy,int sdir){
 		if(nc == 0)
 			break;
 		if(nc == 3){ // 유령
-			ghost++;
-			tot += dist;
+            if(visit[make_pair(nx,ny)] < visitCounter){
+                visit[make_pair(nx,ny)]= visitCounter;
+			    ghost++;
+			    tot += (ll)dist;
+            }
 		}
 		if(nc == 1){ // '/'거울
 			if(dir%2)
@@ -112,7 +117,7 @@ void simul(int sx,int sy,int sdir){
 			else dir = 0;
 		}
 	}
-	printf("%d %d\n",ghost,tot);
+	printf("%d %lld\n",ghost,tot);
 	sol[make_tuple(sx,sy,sdir)] = make_pair(ghost,tot);
 }
 int main(){
@@ -178,6 +183,7 @@ int main(){
 				sy = x;
 				break;
 		}
+        visitCounter++;
 		simul(sx,sy,dir);
 	}
 }
