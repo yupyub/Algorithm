@@ -30,42 +30,43 @@ int retDir(int x1, int y1,int x2,int y2){
         return 3;
 }
 void Dijk(int sx,int sy){
-    priority_queue<tuple<int,int,int,int,int>,vector<tuple<int,int,int,int,int> >, greater<tuple<int,int,int,int,int> > > pq;
-    pq.push(make_tuple(0,0,0,sx,sy));
+    priority_queue<tuple<int,int,int,int>,vector<tuple<int,int,int,int> >, greater<tuple<int,int,int,int> > > pq;
+    pq.push(make_tuple(0,0,sx,sy));
     dist[sx][sy] = 0;
+    int pl = 0;
     while(!pq.empty()){
         int d = get<0>(pq.top());
-        int ax = get<1>(pq.top());
-        int ay = get<2>(pq.top());
-        int x = get<3>(pq.top());
-        int y = get<4>(pq.top());
-        //printf("(%d, %d) <%d, %d> %d\n",x,y,ax,ay,d);
+        int acc = get<1>(pq.top());
+        int x = get<2>(pq.top());
+        int y = get<3>(pq.top());
+        printf("%d %d %d %d\n",x,y,d,acc);
         pq.pop();
         for(int i = 0;i<4;i++){ 
             int nx = x+dx[i];
             int ny = y+dy[i];
-            int nax = ax;
-            int nay = ay;
-            int nd = d-(nax*nax+nay*nay);
+            int nd = d;
+            int nacc = acc;
             if(nx<0 || ny<0 || nx>=N || ny>=M)
                 continue;
-            if(!(arr[nx][ny] == arr[x][y] && arr[nx][ny] != 0)){
-                nax += (i+1)%2;
-                nay += (i)%2;
-            }
-            if(nax*nax + nay*nay>L)
-                continue;
-            nd += nax*nax + nay*nay;
             if(arr[nx][ny] != arr[x][y]){
-                if(arr[nx][ny] != 0)
-                    nax = nay = 0;
+                nd += 1;
+                if(arr[nx][ny] == 0)
+                    nacc += 1;
+                else   
+                    nacc = 0;
             }
-            else if(arr[nx][ny] != 0){
-                nax = nay = 0;
+            else if(arr[nx][ny] == 0){
+                nd += 1;
+                nacc += 1;
             }
+            else{
+                nacc = 0;
+            }
+            if(nacc>L)
+                continue;
             if(dist[nx][ny]>nd){
                 dist[nx][ny] = nd;
-                pq.push(make_tuple(nd,nax,nay,nx,ny));
+                pq.push(make_tuple(nd,nacc,nx,ny));
             }
         }
     }
@@ -73,14 +74,16 @@ void Dijk(int sx,int sy){
 int main(){
     scanf("%d %d",&M,&N);
     scanf("%d %d %d %d",&U,&V,&W,&L);
+    L = L*L;
     int sx,sy;
     int x,y;  
-    int prevx,prevy; 
-    scanf("%d %d",&sy,&sx);
+    int prevx,prevy;
+    ////////////////////////////////////////
+    scanf("%d %d",&sx,&sy);
     prevx = sx;
     prevy = sy;
     for(int i = 1;i<U;i++){ 
-        scanf("%d %d",&y,&x);
+        scanf("%d %d",&x,&y);
         int dir = retDir(prevx,prevy,x,y);
         while(prevx != x || prevy != y){
             arr[prevx][prevy] = 1;
@@ -89,9 +92,10 @@ int main(){
         }
     }
     arr[x][y] = 1;
-    scanf("%d %d",&prevy,&prevx);
+    ////////////////////////////////////////
+    scanf("%d %d",&prevx,&prevy);
     for(int i = 1;i<V;i++){
-        scanf("%d %d",&y,&x);
+        scanf("%d %d",&x,&y);
         int dir = retDir(prevx,prevy,x,y);
         while(prevx != x || prevy != y){
             arr[prevx][prevy] = 2;
@@ -100,9 +104,10 @@ int main(){
         }
     }
     arr[x][y] = 2;
+    ////////////////////////////////////////
     int x1,x2,y1,y2;
     for(int i = 0;i<W;i++){
-        scanf("%d %d %d %d",&y1,&x1,&y2,&x2);
+        scanf("%d %d %d %d",&x1,&y1,&x2,&y2);
         int dir = retDir(x1,y1,x2,y2);
         while(x1 != x2 || y1 != y2){
             arr[x1][y1] = i+3;
@@ -111,9 +116,11 @@ int main(){
         }
         arr[x1][y1] = i+3;
     }
+    ////////////////////////////////////////
     for(int i = 0;i<N;i++)
         for(int j = 0;j<M;j++)
             dist[i][j] = INF;
     Dijk(sx,sy);
+    printf("%d %d : <%d>\n",x,y,dist[x][y]);
     printf("%d\n",dist[x][y] == INF ? -1:dist[x][y]);
 }
