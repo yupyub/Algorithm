@@ -6,7 +6,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
-
 #include <algorithm>
 #include <array>
 #include <bitset>
