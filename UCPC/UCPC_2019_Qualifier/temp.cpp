@@ -1,3 +1,4 @@
+// 유령 중복을 허용하지 않는 경우
 #include <cstdio>
 #include <algorithm>
 #include <iostream>
