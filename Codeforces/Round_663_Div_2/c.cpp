@@ -15,7 +15,7 @@ using namespace std;
 typedef long long ll;
 typedef pair<int,int> ii;
 const int INF = 987654321;
-const ll MOD = 1000000007;
+const ll MOD = 1000000007LL;
 int dx[] = {-1,0,1,0};
 int dy[] = {0,1,0,-1};
 int N,M;
