@@ -27,7 +27,8 @@ int main(){
     int n,m,a;
     scanf("%d %d",&n,&m);
     Psum[0] = 0;
-    for(int i = 1;i<=n;i++){
+    for(int i = 1;i<=
+	n;i++){
         scanf("%d",&a);
         Psum[i] = Psum[i-1] + a;
     }
