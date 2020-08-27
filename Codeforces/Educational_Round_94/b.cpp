@@ -10,20 +10,20 @@
 #include <functional>
 using namespace std;
 typedef long long ll;
-int f(int P,int F,int cntS,int cntW,int S,int W){
-	int ans = 0;
+ll f(ll P,ll F,ll cntS,ll cntW,ll S,ll W){
+	ll ans = 0;
 	for(int i = 0;i<=cntS;i++){
-		int cnt = i;
-		int tmpP = P;
-		int tmpF = F;
+		ll cnt = i;
+		ll tmpP = P;
+		ll tmpF = F;
 		if(i*S<=tmpP){
 			tmpP -= i*S;
-			int tmp = tmpP/W > cntW ? cntW : tmpP/W;
+			ll tmp = tmpP/W > cntW ? cntW : tmpP/W;
 			cnt += tmp;
-			int tmp1 = tmpF/S > (cntS-i) ? (cntS-i) : tmpF/S;
+			ll tmp1 = tmpF/S > (cntS-i) ? (cntS-i) : tmpF/S;
 			tmpF -= tmp1*S;
 			cnt += tmp1;
-			int tmp2 = tmpF/W > (cntW-tmp) ? (cntW-tmp) : tmpF/W;
+			ll tmp2 = tmpF/W > (cntW-tmp) ? (cntW-tmp) : tmpF/W;
 			cnt += tmp2;
 		}
 		else cnt = -1;
@@ -36,9 +36,9 @@ int main(){
 	int t;
 	scanf("%d",&t);
 	while(t--){
-		int P,F,cntS,cntW,S,W;
-		scanf("%d %d %d %d %d %d",&P,&F,&cntS,&cntW,&S,&W);
-		int ans1,ans2;
+		ll P,F,cntS,cntW,S,W;
+		scanf("%lld %lld %lld %lld %lld %lld",&P,&F,&cntS,&cntW,&S,&W);
+		ll ans1,ans2;
 		if(S<W)
 			ans1 = f(P,F,cntS,cntW,S,W);
 		else
@@ -47,6 +47,6 @@ int main(){
 			ans2 = f(F,P,cntS,cntW,S,W);
 		else
 			ans2 = f(F,P,cntW,cntS,W,S);
-		printf("%d\n",max(ans1,ans2));
+		printf("%lld\n",max(ans1,ans2));
 	}
 }
