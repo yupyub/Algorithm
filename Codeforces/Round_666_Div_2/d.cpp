@@ -23,9 +23,34 @@ int main(){
 	int t;
 	scanf("%d",&t);
 	while(t--){
-		
-
-		
+		priority_queue<int> pq;
+		int n,a;
+		scanf("%d",&n);
+		for(int i = 0;i<n;i++){
+			scanf("%d",&a);
+			pq.push(a);
+		}
+		int ans = 0;
+		while(!pq.empty()){
+			int n1 = pq.top();
+			pq.pop();
+			ans = (ans+1)%2;
+			if(pq.empty())
+				break;
+			int n2 = pq.top();
+			pq.pop();
+			ans = (ans+1)%2;
+			n1--;
+			n2--;
+			if(n1 != 0)
+				pq.push(n1);
+			if(n2 != 0)
+				pq.push(n2);
+		}
+		if(ans)
+			printf("T\n");
+		else
+			printf("HL\n");
 	}
 
 
