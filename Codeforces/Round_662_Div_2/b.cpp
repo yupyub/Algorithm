@@ -10,39 +10,46 @@
 #include <functional>
 using namespace std;
 typedef long long ll;
-
+int plank[100001];
+int Four = 0;
+int Two = 0;
+void addP(int x){
+	if(plank[x]%2 == 1)
+		Two++;
+	if(plank[x]%4 == 3)
+		Four++;
+	plank[x]++;
+}
+void subP(int x){
+	if(plank[x] >= 2 && plank[x]%2 == 0)
+		Two--;
+	if(plank[x] >= 4 && plank[x]%4 == 0)
+		Four--;
+	plank[x]--;
+}
 int main(){
-	int t;
-	scanf("%d",&t);
-	while(t--){
-		int n;
-		scanf("%d",&n);
-		int k = 2;
-		vector<int> v;	
-		while(n!=1){
-			if(k*k>n){
-				v.push_back(n);
-				break;
-			}
-			if(n%k == 0){
-				v.push_back(k);
-				n /=k;
-			}
-			else
-				k++;
-		}
-		int num[2] = {1,1};
-		for(int i = v.size()-1;i>0;i--){
-			num[0] *= v[i];
-			num[1] *= v[i];
-		}
-		int a,b;
-		a = v[0]-1;
-		b = 1;
-		num[0] *= a;
-		num[1] *= b;
-		if(num[0]>num[1])
-			swap(num[0], num[1]);
-		printf("%d %d\n",num[0],num[1]);
+	int n;
+	scanf("%d",&n);
+	for(int i = 0;i<n;i++){
+		int x;
+		scanf("%d",&x);
+		addP(x);
+	}
+	scanf("%d",&n);
+	char c;
+	int d;
+	for(int i = 0;i<n;i++){
+		scanf("\n%c %d",&c,&d);
+		if(c == '+')
+			addP(d);
+		else
+			subP(d);
+		//printf("%d %d\n",Four,Two);
+		if(Four>1)
+			printf("YES\n");
+		else if(Four>0 && (Two-Four*2)>1)
+			printf("YES\n");
+		else
+			printf("NO\n");
 	}
 }
