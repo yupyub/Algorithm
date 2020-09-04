@@ -12,36 +12,9 @@
 #include <cmath>
 using namespace std;
 
-int Answer;		
-
-int N,K;
-int arr1[3001];
-int arr2[3001];
-int dp[3001][3001];
-int f(int n,int m){
-	int &ret = dp[n][m];
-	if(ret != -1)
-		return ret;
-	if(n == 0 && m == 0)
-		return ret = 1;
-	int sum = 0;
-	for(int i = n;i>0;i--){
-		sum += arr1[i];
-		if(sum>K)
-			break;
-		if(!f(i-1,m))
-			return ret = 1;
-	}
-	sum = 0;
-	for(int i = m;i>0;i--){
-		sum += arr2[i];
-		if(sum>K)
-			break;
-		if(!f(n,i-1))
-			return ret = 1;
-	}
-	return ret = 0;
-}
+int Answer;
+int arr1[200001];
+int arr2[200001];
 int main(int argc, char** argv)
 {
     ios_base::sync_with_stdio(false);
@@ -52,28 +25,28 @@ int main(int argc, char** argv)
 	cin >> T;
 	for(test_case = 0; test_case  < T; test_case++)
 	{
+
 		Answer = 0;
 		/////////////////////////////////////////////////////////////////////////////////////////////
 
+	    int N,K;
 		cin >> N >> K;
-	    for(int i = 1;i<=N;i++)
-			cin >> arr1[i];
-		for(int i = 1;i<=N;i++)
-			cin >> arr2[i];
-		for(int i = 0;i<=N;i++){
-			for(int j = 0;j<=N;j++)
-				dp[i][j] = -1;
+		for(int i = 0;i<N;i++){
+		    cin >> arr1[i];
 		}
-		for(int i = 0;i<=N;i++){
-			for(int j = 0;j<=N;j++){
-				Answer += f(i,j);
-			}
+		for(int i = 0;i<N;i++){
+		    cin >> arr2[i];
+		}
+		sort(arr1,arr1+N);
+		sort(arr2,arr2+N);
+		for(int i = 0;i<K;i++){
+		    Answer = max(Answer,arr1[i]+arr2[K-1-i]);
 		}
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		
 		// Print the answer to standard output(screen).
 		cout << "Case #" << test_case+1 << endl;
-		cout << Answer << " " << (N+1)*(N+1) - Answer << endl;
+		cout << Answer << endl;
 	}
 
 	return 0;//Your program should return 0 on normal termination.
