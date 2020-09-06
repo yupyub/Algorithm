@@ -40,26 +40,10 @@ int main(int argc, char** argv)
 		}
 		sort(A,A+N);
 		sort(B,B+N);
-		ll maxi = 0;
-		ll ans = 0 ;
-		for(int i = 0;i<N;i++){
-			maxi = max(maxi,abs(A[i] - B[i]));
-			ans += abs(A[i] - B[i]);
-		}
-		ans -= maxi;
-		Answer = min(Answer,ans);
-		ans = 0 ;
-		for(int i = 1;i<N;i++){
-			ans += abs(A[i-1] - B[i]);
-		}
-		// cout << ">> " << ans << endl;
-		Answer = min(Answer,ans);
-		ans = 0 ;
-		for(int i = 0;i<N-1;i++){
-			ans += abs(A[i+1] - B[i]);
-		}
-		// cout << ">> " << ans << endl;
-		Answer = min(Answer,ans);
+		
+
+
+		
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		
 		// Print the answer to standard output(screen).

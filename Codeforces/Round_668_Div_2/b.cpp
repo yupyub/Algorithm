@@ -20,29 +20,21 @@ int dy[] = {0,1,0,-1};
 int N,M;
 ll arr[100000];
 int main(){
-	scanf("%d",&N);
-	for(int i = 0;i<N;i++)
-		scanf("%lld",&arr[i]);
-	sort(arr,arr+N);
-	ll C = 1;
-	ll ans = 987654321987654321;
-	while(1){
-		int flag = 0;
-		ll tmp = 1;
+	int t;
+	scanf("%d",&t);
+	while(t--){
+		int n;
+		scanf("%d",&n);
 		ll tot = 0;
-		for(int i = 0;i<N;i++){
-			if(tmp>(100000000000000)){
-				flag = 1;
-				break;
+		ll ans = 0;
+		for(int i = 0;i<n;i++){
+			scanf("%lld",&arr[i]);
+			tot += arr[i];
+			if(tot<0){
+				ans -= tot;
+				tot = 0;
 			}
-			tot += abs(arr[i]-tmp);
-			tmp *= C;
 		}
-		//printf("%lld %lld %lld %d\n",C,tot,tmp,flag);
-		if(flag)
-			break;
-		ans = min(ans,tot);
-		C++;
+		printf("%lld\n",ans);
 	}
-	printf("%lld\n",ans);
 }
