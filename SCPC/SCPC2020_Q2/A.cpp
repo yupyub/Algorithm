@@ -10,11 +10,12 @@
 #include <string>
 #include <cstring>
 #include <cmath>
+typedef long long ll;
 using namespace std;
 
-int Answer;
-int arr1[200001];
-int arr2[200001];
+ll Answer;
+ll A[200000];
+ll B[200000];
 int main(int argc, char** argv)
 {
     ios_base::sync_with_stdio(false);
@@ -26,22 +27,39 @@ int main(int argc, char** argv)
 	for(test_case = 0; test_case  < T; test_case++)
 	{
 
-		Answer = 0;
+		Answer = 200000000000001;
 		/////////////////////////////////////////////////////////////////////////////////////////////
 
-	    int N,K;
-		cin >> N >> K;
+	    int N;
+		cin >> N;
 		for(int i = 0;i<N;i++){
-		    cin >> arr1[i];
+		    cin >> A[i];
 		}
 		for(int i = 0;i<N;i++){
-		    cin >> arr2[i];
+		    cin >> B[i];
 		}
-		sort(arr1,arr1+N);
-		sort(arr2,arr2+N);
-		for(int i = 0;i<K;i++){
-		    Answer = max(Answer,arr1[i]+arr2[K-1-i]);
+		sort(A,A+N);
+		sort(B,B+N);
+		ll maxi = 0;
+		ll ans = 0 ;
+		for(int i = 0;i<N;i++){
+			maxi = max(maxi,abs(A[i] - B[i]));
+			ans += abs(A[i] - B[i]);
 		}
+		ans -= maxi;
+		Answer = min(Answer,ans);
+		ans = 0 ;
+		for(int i = 1;i<N;i++){
+			ans += abs(A[i-1] - B[i]);
+		}
+		// cout << ">> " << ans << endl;
+		Answer = min(Answer,ans);
+		ans = 0 ;
+		for(int i = 0;i<N-1;i++){
+			ans += abs(A[i+1] - B[i]);
+		}
+		// cout << ">> " << ans << endl;
+		Answer = min(Answer,ans);
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		
 		// Print the answer to standard output(screen).
