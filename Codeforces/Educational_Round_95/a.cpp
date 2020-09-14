@@ -14,11 +14,15 @@ typedef pair<int,int> ii;
 const int INF = 987654321;
 int dx[] = {-1,0,1,0};
 int dy[] = {0,1,0,-1};
+// This contest is unrated.
 
 int main(){
 	int t;
 	scanf("%d",&t);
 	while(t--){
+		ll x,y,k;
+		scanf("%lld %lld %lld",&x,&y,&k);
+		ll ky = k*y;
 		
 	}
 }
