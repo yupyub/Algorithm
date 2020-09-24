@@ -16,7 +16,8 @@ typedef long long ll;
 const int INF = 987654321;
 int dx[] = {-1,0,1,0};
 int dy[] = {0,1,0,-1};
-int arr[250000];
+
+int arr[300][300];
 struct iHeap{
     priority_queue<int> q, qdel;
     void init(){
@@ -82,19 +83,27 @@ int f_mid(){
     return up.top();
 }
 int main(){
-    int n,k;
-    scanf("%d %d",&n,&k);
+    int n,m,w;
+    scanf("%d %d %*d %d",&n,&m,&w);
     for(int i = 0;i<n;i++){
-        scanf("%d",&arr[i]);
+        for(int j = 0;j<m;j++){
+            scanf("%d",&arr[i][j]);
+        }
     }
-    for(int i = 0;i<k;i++){
-        f_push(arr[i]);
+    for(int i = 0;i<n-w+1;i++){
+        up.init();
+        lo.init();
+        for(int j = 0;j<w;j++)
+            for(int k = 0;k<w;k++)
+                f_push(arr[i+j][k]);
+        printf("%d ",f_mid());
+        for(int j = 0;j<m-w;j++){
+            for(int k = 0;k<w;k++){
+                f_pop(arr[i+k][j]);
+                f_push(arr[i+k][j+w]);
+            }
+            printf("%d ",f_mid());
+        }
+        printf("\n");
     }
-    ll ans = f_mid();
-    for(int i = k;i<n;i++){
-        f_pop(arr[i-k]);
-        f_push(arr[i]);
-        ans += (ll)f_mid();
-    }
-    printf("%lld\n",ans);
 }
