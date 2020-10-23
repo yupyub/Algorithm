@@ -22,14 +22,35 @@ int main(){
 	while(t--){
 		int n,m;
 		scanf("%d %d",&n,&m);
+		int div = -1;
+		if(m%2 == 0){
+			div = m/2;
+		}
+		int a;
+		int cnt = 0;
 		for(int i = 0;i<n;i++){
 			scanf("%d",&arr[i].first);
 			arr[i].second = i;
+			if(arr[i].first == div){
+				cnt++;
+			}
 			ans[i] = 0;
 		}
-		sort(arr,arr+n);
+		cnt/=2;
 		for(int i = 0;i<n;i++){
-			ans[i] = 
+			if(arr[i].first == div){
+				if(cnt){
+					cnt--;
+					ans[arr[i].second] = 1;
+				}
+			}
+			else if(arr[i].first>m/2){
+				ans[arr[i].second] = 1;
+			}
 		}
+		for(int i = 0;i<n;i++){
+			printf("%d ",ans[i]);
+		}
+		printf("\n");
 	}
 }
