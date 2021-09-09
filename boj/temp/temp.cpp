@@ -28,5 +28,4 @@ int main(){
     int n;
     scanf("%d",&n);
     H(n,'A','C','B');
-
 }
