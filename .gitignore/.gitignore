@@ -1,5 +1,6 @@
 *.opendb
 *.out
 .vscode
+.vs
 temp
 temp.cpp
