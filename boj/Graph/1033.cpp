@@ -41,6 +41,14 @@ int main() {
 	c = cost[0];
 	for (int i = 1; i < N; i++)
 		c = gcd(c, cost[i]);
+	/*
+	GCD 로 한번 더 나누어주지 않는 경우, 아래와 같은 반례 발생
+	3
+	0 1 9 2
+	1 2 2 1
+	ans : 9 2 1
+	wrong ans: 18 4 2
+	*/
 	for (int i = 0; i < N; i++)
 		printf("%lld ", cost[i]/c);
 	return 0;
