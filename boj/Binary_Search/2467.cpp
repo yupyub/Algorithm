@@ -21,7 +21,7 @@ int main(){
     int ans_x, ans_y, val, base_idx;
     for(int i = 0; i<N-1; i++){
         base_idx = lower_bound(liq+i+1, liq+N, -liq[i]) - liq;
-        for(int idx = base_idx - 2; idx < base_idx + 3; idx++){
+        for(int idx = base_idx - 1; idx <= base_idx + 1; idx++){
             if(idx == i)
                 continue;
             if(idx < 0 || idx >= N)
